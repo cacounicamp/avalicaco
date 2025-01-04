@@ -3,4 +3,11 @@ CREATE TABLE evaluations (
   title VARCHAR NOT NULL,
   class TEXT NOT NULL,
   date TIMESTAMP NOT NULL
+);
+
+CREATE TABLE users (
+  id SERIAL PRIMARY KEY,
+  login VARCHAR UNIQUE NOT NULL ,
+  password_hash VARCHAR NOT NULL
 )
+

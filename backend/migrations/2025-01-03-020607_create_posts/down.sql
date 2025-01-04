@@ -1,1 +1,2 @@
-DROP TABLE evaluations
+DROP TABLE evaluations;
+DROP TABLE users;
