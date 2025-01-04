@@ -1,0 +1,6 @@
+CREATE TABLE evaluations (
+  id SERIAL PRIMARY KEY,
+  title VARCHAR NOT NULL,
+  class TEXT NOT NULL,
+  date TIMESTAMP NOT NULL
+)
