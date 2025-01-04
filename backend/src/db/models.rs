@@ -21,4 +21,10 @@ pub struct NewEvaluation {
     pub class : String,
     pub date : NaiveDateTime
 }
+#[derive(Deserialize, ToSchema)]
+pub struct UpdateEvaluation {
+    pub title: String,
+    pub class : String,
+    pub date : NaiveDateTime
+}
  

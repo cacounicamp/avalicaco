@@ -4,7 +4,7 @@ use endpoints::evaluations;
 use actix_web::{middleware::Logger, App, HttpServer};
 use std::{env, error::Error};
 use utoipa::OpenApi;
-use utoipa_actix_web::{scope, service_config::ServiceConfig, AppExt};
+use utoipa_actix_web::{service_config::ServiceConfig, AppExt};
 use utoipa_swagger_ui::SwaggerUi;
 
 #[actix_web::main]
@@ -21,12 +21,15 @@ async fn main() -> Result<(), impl Error> {
             .into_utoipa_app()
             .openapi(ApiDoc::openapi())
             .map(|app| app.wrap(Logger::default()))
-            .service(scope("/evaluation").configure(|config: &mut ServiceConfig| {
+            .configure(|config: &mut ServiceConfig| {
                 config
                   .service(evaluations::get)
+                  .service(evaluations::get_id)
+                  .service(evaluations::patch)
+                  .service(evaluations::delete)
                   .service(evaluations::post);
               },
-            ))
+            )
             .openapi_service(|api| {
                 SwaggerUi::new("/swagger-ui/{_:.*}").url("/api-docs/openapi.json", api)
             })
