@@ -1,10 +1,9 @@
 use super::prelude::*;
 use crate::db::create_evaluation;
-
 #[utoipa::path(
     responses(
         (status = 200, description = "List of evaluations", body = [Evaluation])
-    )
+    ),
   )]
 #[get("/evaluations")]
 pub async fn get() -> impl Responder {
@@ -35,7 +34,7 @@ pub async fn get_id(path: web::Path<(i32,)>) -> impl Responder {
         .first(connection);
     match result {
         Ok(eva) => HttpResponse::Ok().json(eva),
-        Err(diesel::result::Error::NotFound) => HttpResponse::NotFound().finish(),
+        Err(DieselError::NotFound) => HttpResponse::NotFound().finish(),
         _ => HttpResponse::InternalServerError().finish()
     }
 }
@@ -94,9 +93,10 @@ pub async fn post(req_body: web::Json<PostEvaluationRequest>) -> impl Responder 
 #[utoipa::path(
     responses(
         (status = 200),
-    )
-  )]
-#[delete("/evaluations/{id}")]
+    ),
+    security(("jwt" = []))
+)]
+#[delete("/evaluations/{id}", wrap = "RequireAuth")]
 pub async fn delete(path: web::Path<(i32,)>) -> impl Responder {
     use schema::evaluations::dsl::*;
     let (eid, ) = path.into_inner();

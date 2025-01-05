@@ -1,3 +1,4 @@
+pub mod auth;
 pub mod evaluations;
-pub mod users;
 pub mod prelude;
+pub mod users;
