@@ -13,6 +13,7 @@ struct LoginResponse {
 }
 
 #[utoipa::path(
+    tag = tag::AUTH,
     responses((status = 200))
 )]
 #[post("/auth/login")]
@@ -36,6 +37,7 @@ async fn login(body: web::Json<LoginRequest>) -> impl Responder {
 }
 
 #[utoipa::path(
+    tag = tag::AUTH,
     responses((status = 200)),
     security(("jwt" = []))
 )]

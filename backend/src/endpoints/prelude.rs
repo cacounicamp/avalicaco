@@ -1,4 +1,5 @@
 pub use crate::{
+    apidoc::tag,
     auth::RequireAuth,
     db::{establish_connection, models::*, schema},
 };

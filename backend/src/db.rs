@@ -1,9 +1,9 @@
-pub mod schema;
 pub mod models;
+pub mod schema;
 use diesel::prelude::*;
 use dotenvy::dotenv;
-use std::env;
 use models::*;
+use std::env;
 
 pub fn establish_connection() -> PgConnection {
     dotenv().ok();
@@ -13,11 +13,8 @@ pub fn establish_connection() -> PgConnection {
         .unwrap_or_else(|_| panic!("Error connecting to {}", database_url))
 }
 
-
-
 pub fn create_evaluation(conn: &mut PgConnection, evaluation: NewEvaluation) -> Evaluation {
     use schema::evaluations;
-
 
     diesel::insert_into(evaluations::table)
         .values(&evaluation)
@@ -25,5 +22,3 @@ pub fn create_evaluation(conn: &mut PgConnection, evaluation: NewEvaluation) -> 
         .get_result(conn)
         .expect("Error saving new evaluation")
 }
-
- 
