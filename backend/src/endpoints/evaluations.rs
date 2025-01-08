@@ -1,5 +1,6 @@
+use crate::db::evaluation_db::{evaluation_create, evaluation_delete, evaluation_update};
+
 use super::prelude::*;
-use crate::db::create_evaluation;
 #[utoipa::path(
     tag = tag::EVALUATIONS,
     responses(
@@ -50,13 +51,10 @@ pub async fn get_id(path: web::Path<(i32,)>) -> impl Responder {
   )]
 #[patch("/evaluations/{id}", wrap = "RequireAuth")]
 pub async fn patch(path: web::Path<(i32,)>, body: web::Json<UpdateEvaluation>) -> impl Responder {
-    use schema::evaluations::dsl::*;
-    let (eid,) = path.into_inner();
+    let (id,) = path.into_inner();
     let req = body.into_inner();
     let connection = &mut establish_connection();
-    let result = diesel::update(evaluations.filter(id.eq(eid)))
-        .set((class.eq(req.class), title.eq(req.title), date.eq(req.date)))
-        .execute(connection);
+    let result = evaluation_update(connection, id, req);
 
     match result {
         Ok(_) => HttpResponse::Ok().finish(),
@@ -82,14 +80,14 @@ pub struct PostEvaluationRequest {
 pub async fn post(req_body: web::Json<PostEvaluationRequest>) -> impl Responder {
     let connection = &mut establish_connection();
     let ev = req_body.into_inner();
-    let post = create_evaluation(
+    let post = evaluation_create(
         connection,
         NewEvaluation {
             date: ev.date.naive_utc(),
             title: ev.title,
             class: ev.class,
         },
-    );
+    ).unwrap();
     HttpResponse::Ok().json(post)
 }
 
@@ -102,10 +100,9 @@ pub async fn post(req_body: web::Json<PostEvaluationRequest>) -> impl Responder 
 )]
 #[delete("/evaluations/{id}", wrap = "RequireAuth")]
 pub async fn delete(path: web::Path<(i32,)>) -> impl Responder {
-    use schema::evaluations::dsl::*;
     let (eid,) = path.into_inner();
     let connection = &mut establish_connection();
-    let result = diesel::delete(evaluations.filter(id.eq(eid))).execute(connection);
+    let result = evaluation_delete(connection, eid);
 
     match result {
         Ok(_) => HttpResponse::Ok().finish(),

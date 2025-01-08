@@ -4,7 +4,7 @@ mod endpoints;
 mod apidoc;
 use actix_web::{middleware::Logger, App, HttpServer};
 use apidoc::ApiDoc;
-use endpoints::{evaluations, users};
+use endpoints::{evaluations, suggestions, users};
 use utoipa::OpenApi;
 use std::{env, error::Error};
 use utoipa_actix_web::AppExt;
@@ -36,7 +36,11 @@ async fn main() -> Result<(), impl Error> {
                     .service(evaluations::get_id)
                     .service(evaluations::patch)
                     .service(evaluations::delete)
-                    .service(evaluations::post);
+                    .service(evaluations::post)
+                    .service(suggestions::post)
+                    .service(suggestions::get)
+                    .service(suggestions::get_by_id)
+                    .service(suggestions::patch);
             })
             .openapi_service(|api| {
                 RapiDoc::with_openapi("/api-docs/openapi2.json", api).path("/rapidoc")

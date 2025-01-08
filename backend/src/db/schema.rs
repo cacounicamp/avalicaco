@@ -15,7 +15,8 @@ diesel::table! {
         suggestion_type_id -> Int4,
         evaluation_id -> Nullable<Int4>,
         title -> Nullable<Varchar>,
-        date -> Nullable<Varchar>,
+        class -> Nullable<Varchar>,
+        date -> Nullable<Timestamp>,
     }
 }
 

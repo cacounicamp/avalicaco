@@ -23,6 +23,7 @@ pub mod tag {
     pub const AUTH: &str = "Authentication";
     pub const USERS: &str = "Users";
     pub const EVALUATIONS: &str = "Evaluations";
+    pub const SUGGESTIONS: &str = "Suggestions";
 }
 #[derive(OpenApi)]
 #[openapi(
@@ -30,6 +31,7 @@ pub mod tag {
 		(name = tag::AUTH),
 		(name = tag::USERS),
 		(name = tag::EVALUATIONS),
+		(name = tag::SUGGESTIONS)
 	),
 	modifiers(&SecurityAddon)
 )]

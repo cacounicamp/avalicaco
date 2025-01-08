@@ -20,7 +20,15 @@ CREATE TABLE suggestion_type (
 CREATE TABLE suggestion (
   id SERIAL PRIMARY KEY,
   suggestion_type_id INTEGER NOT NULL REFERENCES suggestion_type(id),
-  evaluation_id INTEGER NULL REFERENCES evaluations(id),
+  evaluation_id INTEGER NULL REFERENCES evaluations(id) ON DELETE CASCADE,
   title VARCHAR NULL,
-  date VARCHAR NULL
+  class VARCHAR NULL,
+  date TIMESTAMP NULL
 );
+INSERT INTO users(login, password_hash) values
+  ('admin', 'senha');
+
+INSERT INTO suggestion_type values 
+  (1, 'create'),
+  (2, 'update'),
+  (3, 'delete'); 
