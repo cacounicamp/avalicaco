@@ -10,6 +10,23 @@ diesel::table! {
 }
 
 diesel::table! {
+    suggestion (id) {
+        id -> Int4,
+        suggestion_type_id -> Int4,
+        evaluation_id -> Nullable<Int4>,
+        title -> Nullable<Varchar>,
+        date -> Nullable<Varchar>,
+    }
+}
+
+diesel::table! {
+    suggestion_type (id) {
+        id -> Int4,
+        name -> Varchar,
+    }
+}
+
+diesel::table! {
     users (id) {
         id -> Int4,
         login -> Varchar,
@@ -17,7 +34,12 @@ diesel::table! {
     }
 }
 
+diesel::joinable!(suggestion -> evaluations (evaluation_id));
+diesel::joinable!(suggestion -> suggestion_type (suggestion_type_id));
+
 diesel::allow_tables_to_appear_in_same_query!(
     evaluations,
+    suggestion,
+    suggestion_type,
     users,
 );
